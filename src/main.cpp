@@ -5,12 +5,6 @@
 
 #include "wifiPass.h"
 
-// #include "esp_wpa2.h"
-// #include "esp_wifi.h"
-
-// const char* ssid = "make";
-// const char* password = "makeallthestuff";
-
 const char* apiUrl = "https://www.omegav.ntnu.no/api/dooropen.php";
 
 
