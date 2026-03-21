@@ -11,6 +11,11 @@
 #define LED_PIN 5     // GPIO pin
 #define NUM_LEDS 2    // number of *groups*, not individual LEDs
 
+// fyll inn her:
+// #define EAP_IDENTITY "din_epost@skole.no" // Ditt brukernavn (som nevnt over)
+// #define EAP_USERNAME "din_epost@skole.no" // Ofte det samme som identity
+// #define EAP_PASSWORD "ditt_passord"       // Ditt Feide-passord
+
 const char* ssid = "eduroam";
 
 // const char* ssid = "make";
