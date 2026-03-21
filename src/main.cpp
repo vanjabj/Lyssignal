@@ -2,15 +2,20 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
+#include <FastLED.h>
 
 #include "wifiPass.h"
 
-#define LED 2
+#define LED 2      // internal led
+#define LED_PIN 5     // GPIO pin
+#define NUM_LEDS 2    // number of *groups*, not individual LEDs
 
 // const char* ssid = "make";
 // const char* password = "makeallthestuff";
 
 const char* apiUrl = "https://www.omegav.ntnu.no/api/dooropen.php";
+
+CRGB leds[NUM_LEDS];
 
 void setup() {
     Serial.begin(115200);
@@ -22,18 +27,31 @@ void setup() {
     WiFi.begin(ssid, password);
     Serial.println("Connecting to wifi...");
 
-    while(WiFi.status() != WL_CONNECTED){
-        Serial.print(".");
-        delay(100);
-    }
+    // while(WiFi.status() != WL_CONNECTED){
+    //     Serial.print(".");
+    //     delay(100);
+    // }
 
     Serial.println("\nConnected to the WiFi network");
     Serial.print("Local ESP32 IP: ");
     Serial.println(WiFi.localIP());
+
+    FastLED.addLeds<WS2811, LED_PIN, GRB>(leds, NUM_LEDS);
 }
 
 void loop() {
 
+  fill_solid(leds, NUM_LEDS, CRGB::Red);
+  FastLED.show();
+  Serial.println("Red");
+  delay(2000);
+  
+  fill_solid(leds, NUM_LEDS, CRGB::Black);
+  FastLED.show();
+  Serial.println("Black");
+  delay(2000);
+
+  /*
   if(WiFi.status() != WL_CONNECTED) {
       Serial.print("Wi-Fi not connected");
       return;
@@ -77,6 +95,7 @@ void loop() {
   } 
   delay(5000); // Wait 5 seconds before next request
 
+  */
   // testing led blinking
 //   delay(500);
 //   digitalWrite(LED,HIGH);
