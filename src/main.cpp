@@ -3,12 +3,15 @@
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
 #include <FastLED.h>
+#include "esp_wpa2.h"
 
 #include "wifiPass.h"
 
-#define LED 2      // internal led
+#define LED 2         // internal led
 #define LED_PIN 5     // GPIO pin
 #define NUM_LEDS 2    // number of *groups*, not individual LEDs
+
+const char* ssid = "eduroam";
 
 // const char* ssid = "make";
 // const char* password = "makeallthestuff";
@@ -18,19 +21,28 @@ const char* apiUrl = "https://www.omegav.ntnu.no/api/dooropen.php";
 CRGB leds[NUM_LEDS];
 
 void setup() {
+
     Serial.begin(115200);
     delay(1000);
 
     pinMode(LED, OUTPUT);       // for testing internal LED
 
-    WiFi.mode(WIFI_STA); 
-    WiFi.begin(ssid, password);
+    WiFi.disconnect(true);
+    WiFi.mode(WIFI_STA);
+
+    // for connecting to wifi (not eduroam)
+    // WiFi.begin(ssid, password);    
+
+    // connecting to eduroam
+    WiFi.begin(ssid, WPA2_AUTH_PEAP, EAP_IDENTITY, EAP_USERNAME, EAP_PASSWORD); 
+
+    WiFi.begin(ssid); 
     Serial.println("Connecting to wifi...");
 
-    // while(WiFi.status() != WL_CONNECTED){
-    //     Serial.print(".");
-    //     delay(100);
-    // }
+    while(WiFi.status() != WL_CONNECTED){
+        Serial.print(".");
+        delay(100);
+    }
 
     Serial.println("\nConnected to the WiFi network");
     Serial.print("Local ESP32 IP: ");
@@ -41,17 +53,17 @@ void setup() {
 
 void loop() {
 
-  fill_solid(leds, NUM_LEDS, CRGB::Red);
-  FastLED.show();
-  Serial.println("Red");
-  delay(2000);
+  // led strip blinking
+  // fill_solid(leds, NUM_LEDS, CRGB::Red);
+  // FastLED.show();
+  // Serial.println("Red");
+  // delay(2000);
   
-  fill_solid(leds, NUM_LEDS, CRGB::Black);
-  FastLED.show();
-  Serial.println("Black");
-  delay(2000);
+  // fill_solid(leds, NUM_LEDS, CRGB::Black);
+  // FastLED.show();
+  // Serial.println("Black");
+  // delay(2000);
 
-  /*
   if(WiFi.status() != WL_CONNECTED) {
       Serial.print("Wi-Fi not connected");
       return;
@@ -95,7 +107,6 @@ void loop() {
   } 
   delay(5000); // Wait 5 seconds before next request
 
-  */
   // testing led blinking
 //   delay(500);
 //   digitalWrite(LED,HIGH);
